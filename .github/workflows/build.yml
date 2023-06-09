@@ -8,6 +8,8 @@ on:
 
 permissions:
   contents: read
+  id-token: write
+  packages: write
 
 jobs:
   test:
@@ -25,6 +27,11 @@ jobs:
       uses: actions/setup-go@v2
       with:
         go-version: ${{ matrix.go-version }}
+
+    - name: Install Cosign
+      uses: sigstore/cosign-installer@main
+      with:
+        cosign-release: 'v1.4.1'
 
     - name: Install GoReleaser
       uses: goreleaser/goreleaser-action@v2
