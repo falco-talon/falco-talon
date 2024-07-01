@@ -19,12 +19,12 @@ const (
 	defaultDeduplicationTimeWindow      int    = 5
 	defaultOtelCollectorEndpoint        string = "localhost"
 	defaultOtelCollectorUseInsecureGrpc bool   = false
-	defaultOtelCollectorPort            int    = 4317
 )
 
 type Otel struct {
 	CollectorEndpoint        string `mapstructure:"collector_endpoint"`
-	CollectorPort            string `mapstructure:"collector_port"`
+	CollectorUser            string `mapstructure:"collector_user"`
+	CollectorPassword        string `mapstructure:"collector_password"`
 	CollectorUseInsecureGrpc bool   `mapstructure:"collector_use_insecure_grpc"`
 }
 
@@ -83,7 +83,6 @@ func CreateConfiguration(configFile string) *Configuration {
 	v.SetDefault("deduplication.leader_election", defaultDeduplicationLeaderElection)
 	v.SetDefault("deduplication.time_window_seconds", defaultDeduplicationTimeWindow)
 	v.SetDefault("otel.collector_endpoint", defaultOtelCollectorEndpoint)
-	v.SetDefault("otel.collector_port", defaultOtelCollectorPort)
 	v.SetDefault("otel.collector_use_insecure_grpc", defaultOtelCollectorUseInsecureGrpc)
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	v.AutomaticEnv()

@@ -2,6 +2,7 @@ package tracing
 
 import (
 	"context"
+	"encoding/base64"
 	"errors"
 	"fmt"
 	"log"
@@ -76,12 +77,18 @@ func newTraceProvider() (*trace.TracerProvider, error) {
 }
 
 func newOtlpGrpcExporter(ctx context.Context) (trace.SpanExporter, error) {
-	endpoint := fmt.Sprintf("%s:%s", configuration.GetConfiguration().Otel.CollectorEndpoint, configuration.GetConfiguration().Otel.CollectorPort)
-	insecure := configuration.GetConfiguration().Otel.CollectorUseInsecureGrpc
+	config := configuration.GetConfiguration().Otel
+	endpoint := config.CollectorEndpoint
+	insecure := config.CollectorUseInsecureGrpc
 
 	opts := []otlptracegrpc.Option{
-		otlptracegrpc.WithInsecure(),
 		otlptracegrpc.WithEndpoint(endpoint),
+	}
+
+	if config.CollectorUser != "" && config.CollectorPassword != "" {
+		headers := make(map[string]string)
+		headers["Authorization"] = fmt.Sprintf("Basic %v", base64.StdEncoding.EncodeToString([]byte(config.CollectorPassword+":"+config.CollectorPassword)))
+		opts = append(opts, otlptracegrpc.WithHeaders(headers))
 	}
 
 	if insecure {
