@@ -1,0 +1,46 @@
+extensions:
+  basicauth/otlp:
+    client_auth:
+      username: $GRAFANA_SAAS_USERNAME
+      password: $GRAFANA_SAAS_TOKEN
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+        cors:
+          allowed_origins:
+            - http://*
+            - https://*
+
+exporters:
+  otlphttp:
+    auth:
+      authenticator: basicauth/otlp
+    endpoint: $GRAFANA_SAAS_ENDPOINT
+  prometheus:
+    endpoint: "0.0.0.0:9464"
+  otlp/jaeger:
+    endpoint: "http://jaeger:14250"
+    tls:
+      insecure: true
+processors:
+  batch:
+
+service:
+  extensions:
+    - basicauth/otlp
+  telemetry:
+    logs:
+      level: "debug"
+  pipelines:
+    traces:
+      receivers: [otlp]
+#      exporters: [otlphttp, jaeger]
+      exporters: [otlphttp]
+      processors: [batch]
+    metrics:
+      receivers: [otlp]
+      exporters: [prometheus]
+      processors: [batch]

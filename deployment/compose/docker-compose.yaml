@@ -1,0 +1,54 @@
+version: "3"
+
+volumes:
+  postgres_data:
+services:
+
+  # open telemetry collector
+  collector:
+#    image: otel/opentelemetry-collector-contrib:0.72.0
+    image: otel/opentelemetry-collector-contrib:0.103.0
+    command: ["--config=/otel/collector-config.yaml"]
+    volumes:
+      - ./otel/collector-config.yaml:/otel/collector-config.yaml
+    ports:
+      - "9464:9464"
+      - "4317:4317"
+      - "4318:4318"
+
+  minio:
+    image: quay.io/minio/minio
+    command: server /data --console-address ":9001"
+    volumes:
+      - ./minio/data:/data
+    environment:
+      - MINIO_ROOT_USER=root
+      - MINIO_ROOT_PASSWORD=changeme123
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+  # prometheus
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+  # grafana
+  grafana:
+    image: grafana/grafana:9.0.1
+    container_name: grafana
+    volumes:
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    ports:
+      - "3001:3001"
+
+  # jaeger
+  jaeger:
+    image: jaegertracing/all-in-one
+    ports:
+      - 16686:16686
+      - 14250:14250

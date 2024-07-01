@@ -92,6 +92,7 @@ func Action(action *rules.Action, event *events.Event) (utils.LogLine, *model.Da
 
 	for _, p := range pods.Items {
 		wg.Add(1)
+		p := p // loopclosure: loop variable p captured by func literal
 		go func() {
 			defer wg.Done()
 

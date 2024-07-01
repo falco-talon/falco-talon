@@ -10,19 +10,29 @@ import (
 )
 
 const (
-	defaultListenAddress               string = "0.0.0.0"
-	defaultListPort                    int    = 2803
-	defaultRulesFile                   string = "/etc/falco-talon/rules.yaml"
-	defaultWatchRules                  bool   = true
-	defaultPrintAllEvents              bool   = false
-	defaultDeduplicationLeaderElection bool   = true
-	defaultDeduplicationTimeWindow     int    = 5
+	defaultListenAddress                string = "0.0.0.0"
+	defaultListPort                     int    = 2803
+	defaultRulesFile                    string = "/etc/falco-talon/rules.yaml"
+	defaultWatchRules                   bool   = true
+	defaultPrintAllEvents               bool   = false
+	defaultDeduplicationLeaderElection  bool   = true
+	defaultDeduplicationTimeWindow      int    = 5
+	defaultOtelCollectorEndpoint        string = "localhost"
+	defaultOtelCollectorUseInsecureGrpc bool   = false
+	defaultOtelCollectorPort            int    = 4317
 )
+
+type Otel struct {
+	CollectorEndpoint        string `mapstructure:"collector_endpoint"`
+	CollectorPort            string `mapstructure:"collector_port"`
+	CollectorUseInsecureGrpc bool   `mapstructure:"collector_use_insecure_grpc"`
+}
 
 type Configuration struct {
 	Notifiers        map[string]map[string]interface{} `mapstructure:"notifiers"`
 	AwsConfig        AwsConfig                         `mapstructure:"aws"`
 	MinioConfig      MinioConfig                       `mapstructure:"minio"`
+	Otel             Otel                              `mapstructure:"otel"`
 	LogFormat        string                            `mapstructure:"log_format"`
 	KubeConfig       string                            `mapstructure:"kubeconfig"`
 	ListenAddress    string                            `mapstructure:"listen_address"`
@@ -72,6 +82,9 @@ func CreateConfiguration(configFile string) *Configuration {
 	v.SetDefault("print_all_events", defaultPrintAllEvents)
 	v.SetDefault("deduplication.leader_election", defaultDeduplicationLeaderElection)
 	v.SetDefault("deduplication.time_window_seconds", defaultDeduplicationTimeWindow)
+	v.SetDefault("otel.collector_endpoint", defaultOtelCollectorEndpoint)
+	v.SetDefault("otel.collector_port", defaultOtelCollectorPort)
+	v.SetDefault("otel.collector_use_insecure_grpc", defaultOtelCollectorUseInsecureGrpc)
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	v.AutomaticEnv()
 

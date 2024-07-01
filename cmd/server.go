@@ -1,19 +1,25 @@
 package cmd
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
+
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+
+	"github.com/falco-talon/falco-talon/internal/handler"
+	"github.com/falco-talon/falco-talon/metrics"
+	"github.com/falco-talon/falco-talon/tracing"
 
 	"github.com/fsnotify/fsnotify"
 
 	"github.com/falco-talon/falco-talon/actionners"
 	"github.com/falco-talon/falco-talon/configuration"
-	"github.com/falco-talon/falco-talon/internal/handler"
 	k8s "github.com/falco-talon/falco-talon/internal/kubernetes/client"
 	"github.com/falco-talon/falco-talon/internal/nats"
 	ruleengine "github.com/falco-talon/falco-talon/internal/rules"
-	"github.com/falco-talon/falco-talon/metrics"
 	"github.com/falco-talon/falco-talon/notifiers"
 	"github.com/falco-talon/falco-talon/outputs"
 	"github.com/falco-talon/falco-talon/utils"
@@ -105,9 +111,6 @@ var serverCmd = &cobra.Command{
 			utils.PrintLog("info", utils.LogLine{Result: fmt.Sprintf("%v rule(s) has/have been successfully loaded", len(*rules)), Message: "init"})
 		}
 
-		http.HandleFunc("/", handler.MainHandler)
-		http.HandleFunc("/healthz", handler.HealthHandler)
-		http.HandleFunc("/rules", handler.RulesHandler)
 		http.Handle("/metrics", metrics.Handler())
 
 		if config.WatchRules {
@@ -118,7 +121,7 @@ var serverCmd = &cobra.Command{
 			Addr:         fmt.Sprintf("%s:%d", config.ListenAddress, config.ListenPort),
 			ReadTimeout:  2 * time.Second,
 			WriteTimeout: 2 * time.Second,
-			Handler:      nil,
+			Handler:      newHTTPHandler(),
 		}
 
 		if config.WatchRules {
@@ -212,7 +215,6 @@ var serverCmd = &cobra.Command{
 				}
 			}()
 		}
-
 		// start the local NATS
 		ns, err := nats.StartServer(config.Deduplication.TimeWindowSeconds)
 		if err != nil {
@@ -247,6 +249,7 @@ var serverCmd = &cobra.Command{
 
 		// start the consumer for the actionners
 		c, err := nats.GetConsumer().ConsumeMsg()
+
 		if err != nil {
 			utils.PrintLog("fatal", utils.LogLine{Error: err.Error(), Message: "nats"})
 		}
@@ -254,10 +257,34 @@ var serverCmd = &cobra.Command{
 
 		utils.PrintLog("info", utils.LogLine{Result: fmt.Sprintf("Falco Talon is up and listening on %s:%d", config.ListenAddress, config.ListenPort), Message: "http"})
 
+		otelShutdown, err := tracing.SetupOTelSDK(context.Background())
+		if err != nil {
+			utils.PrintLog("warn", utils.LogLine{Error: err.Error(), Message: "fail to initialize OTEL GRPC exporter."})
+		}
+		defer func() {
+			err = errors.Join(err, otelShutdown(context.Background()))
+		}()
+
 		if err := srv.ListenAndServe(); err != nil {
 			utils.PrintLog("fatal", utils.LogLine{Error: err.Error(), Message: "http"})
 		}
 	},
+}
+
+func newHTTPHandler() http.Handler {
+	mux := http.NewServeMux()
+
+	handleFunc := func(pattern string, handlerFunc func(http.ResponseWriter, *http.Request)) {
+		otelHandler := otelhttp.WithRouteTag(pattern, http.HandlerFunc(handlerFunc))
+		mux.Handle(pattern, otelHandler)
+	}
+
+	handleFunc("/", handler.MainHandler)
+	handleFunc("/healthz", handler.HealthHandler)
+	handleFunc("/rules", handler.RulesHandler)
+
+	otelHandler := otelhttp.NewHandler(mux, "/")
+	return otelHandler
 }
 
 func init() {
