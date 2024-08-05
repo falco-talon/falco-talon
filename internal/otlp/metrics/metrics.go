@@ -18,6 +18,7 @@ import (
 )
 
 const meterName = "github.com/falco-talon/falco-talon"
+const metricPrefix = "falco_talon_"
 
 var (
 	eventCounter        metric.Int64Counter
@@ -49,11 +50,11 @@ func init() {
 		metric.WithInstrumentationVersion(configuration.GetInfo().GitVersion),
 	)
 
-	eventCounter, _ = meter.Int64Counter("event", metric.WithDescription("number of received events"))
-	matchCounter, _ = meter.Int64Counter("match", metric.WithDescription("number of matched events"))
-	actionCounter, _ = meter.Int64Counter("action", metric.WithDescription("number of actions"))
-	notificationCounter, _ = meter.Int64Counter("notification", metric.WithDescription("number of notifications"))
-	outputCounter, _ = meter.Int64Counter("output", metric.WithDescription("number of outputs"))
+	eventCounter, _ = meter.Int64Counter(metricPrefix+"event", metric.WithDescription("number of received events"))
+	matchCounter, _ = meter.Int64Counter(metricPrefix+"match", metric.WithDescription("number of matched events"))
+	actionCounter, _ = meter.Int64Counter(metricPrefix+"action", metric.WithDescription("number of actions"))
+	notificationCounter, _ = meter.Int64Counter(metricPrefix+"notification", metric.WithDescription("number of notifications"))
+	outputCounter, _ = meter.Int64Counter(metricPrefix+"output", metric.WithDescription("number of outputs"))
 }
 
 func IncreaseCounter(log utils.LogLine) {

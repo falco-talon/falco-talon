@@ -15,6 +15,7 @@
   - [Deployment](#deployment)
     - [Helm](#helm)
       - [Configure Falcosidekick](#configure-falcosidekick)
+  - [Development](#development)
   - [License](#license)
   - [Author](#author)
 
@@ -98,6 +99,23 @@ helm install falco falcosecurity/falco --namespace falco \
   --set tty=true \
   --set falcosidekick.enabled=true \
   --set falcosidekick.config.webhook.address=http://falco-talon:2803
+```
+
+## Development
+
+A [Docker Compose stack](./deployment/compose) is provided for local developments and tests. 
+
+This stack starts these services:
+- **Grafana**: accessible at http://localhost:3000
+- **OTEL Collector**
+- **Prometheus**: accessible at http://localhost:9090
+- **Grafana Tempo**
+- **Minio**: accessible at http://localhost:9001 (root/changeme123)
+
+To start the stack:
+```shell
+cd deployment/compose
+docker compose up -d
 ```
 
 ## License

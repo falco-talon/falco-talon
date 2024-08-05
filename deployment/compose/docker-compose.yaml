@@ -1,25 +1,38 @@
-version: "3"
-
 volumes:
   postgres_data:
 services:
-
+  # tempo
+  init:
+    image: grafana/tempo
+    user: root
+    entrypoint:
+      - "chown"
+      - "10001:10001"
+      - "/var/tempo"
+    volumes:
+      - ./tempo-data:/var/tempo
+  tempo:
+    image: grafana/tempo
+    command: [ "--config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./tempo/tempo.yaml:/etc/tempo.yaml:ro
+      - ./tempo/data:/var/tempo
+    ports:
+      - "3200"   # tempo
+      - "4317"
+    depends_on:
+      - init
   # open telemetry collector
   collector:
-#    image: otel/opentelemetry-collector-contrib:0.72.0
-    image: otel/opentelemetry-collector-contrib:0.103.0
-    command: ["--config=/otel/collector-config.yaml"]
-    environment:
-      GRAFANA_SAAS_USERNAME: $GRAFANA_SAAS_USERNAME
-      GRAFANA_SAAS_TOKEN: $GRAFANA_SAAS_TOKEN
-      GRAFANA_SAAS_ENDPOINT: $GRAFANA_SAAS_ENDPOINT
+    image: otel/opentelemetry-collector-contrib
+    command: ["--config=/etc/otel-collector.yaml"]
     volumes:
-      - ./otel/collector-config.yaml:/otel/collector-config.yaml
+      - ./otel/otel-collector.yaml:/etc/otel-collector.yaml:ro
     ports:
       - "9464:9464"
       - "4317:4317"
       - "4318:4318"
-
+  # minio
   minio:
     image: quay.io/minio/minio
     command: server /data --console-address ":9001"
@@ -31,28 +44,25 @@ services:
     ports:
       - "9000:9000"
       - "9001:9001"
-
   # prometheus
   prometheus:
     container_name: prometheus
     image: prom/prometheus:latest
     volumes:
-      - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml:ro
     ports:
       - "9090:9090"
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
   # grafana
   grafana:
-    image: grafana/grafana:9.0.1
+    image: grafana/grafana-oss
     container_name: grafana
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
     volumes:
-      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./grafana/provisioning/:/etc/grafana/provisioning/
     ports:
-      - "3001:3001"
-
-  # jaeger
-  jaeger:
-    image: jaegertracing/all-in-one:1.58.0
-    ports:
-      - 16686:16686
-      - 14250:14250
+      - "3000:3000"

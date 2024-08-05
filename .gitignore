@@ -7,5 +7,6 @@ Memory
 .idea/**
 tmp
 DO-NOT-COMMIT-local-setup.yaml
-deployment/compose/minio
+deployment/compose/minio/data
+deployment/compose/tempo/data
 .env

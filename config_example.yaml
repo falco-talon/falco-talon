@@ -1,10 +1,10 @@
 listen_address: "0.0.0.0" # default: "0.0.0.0"
 listen_port: "2803" # default: "2803"
-rules_file:
+rules_files:
   - "./rules.yaml" # default: "./rules.yaml"
 # kubeConfig: "~/.kube/config" # only if Falco Talon is running outside Kubernetes
 log_format: "color" # log Format: text, color, json (default: color)
-watch_rules: true # reload if the rules file changes (default: true)
+watch_rules: true # reload if the rules files changes (default: true)
 print_all_events: true # print in logs all received events, not only those which match
 otel:
   enabled: false
