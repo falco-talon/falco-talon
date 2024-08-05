@@ -7,10 +7,11 @@ log_format: "color" # log Format: text, color, json (default: color)
 watch_rules: true # reload if the rules file changes (default: true)
 print_all_events: true # print in logs all received events, not only those which match
 otel:
-  enabled: false
+  traces_enabled: true
+  metrics_enabled: true
   collector_port: 4317
   collector_endpoint: localhost
-  collector_use_insecure_grpc: false
+  collector_use_insecure_grpc: true
 
 deduplication:
   leader_election: true # enable the leader election for cluster mode (in k8s only)

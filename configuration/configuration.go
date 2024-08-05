@@ -17,31 +17,35 @@ const (
 	defaultPrintAllEvents               bool   = false
 	defaultDeduplicationLeaderElection  bool   = true
 	defaultDeduplicationTimeWindow      int    = 5
-	defaultOtelCollectorEnabled         bool   = false
+	defaultOtelCollectorTracesEnabled   bool   = false
+	defaultOtelCollectorMetricsEnabled  bool   = false
 	defaultOtelCollectorEndpoint        string = "localhost"
 	defaultOtelCollectorUseInsecureGrpc bool   = false
 	defaultOtelCollectorPort            int    = 4317
+	defaultOtelCollectorGRPCTimeout            = 10
 )
 
 type Otel struct {
 	CollectorEndpoint        string `mapstructure:"collector_endpoint"`
 	CollectorPort            string `mapstructure:"collector_port"`
+	Timeout                  int    `mapstructure:"timeout"`
 	CollectorUseInsecureGrpc bool   `mapstructure:"collector_use_insecure_grpc"`
-	Enabled                  bool   `mapstructure:"enabled"`
+	TracesEnabled            bool   `mapstructure:"traces_enabled"`
+	MetricsEnabled           bool   `mapstructure:"metrics_enabled"`
 }
 
 type Configuration struct {
 	Notifiers        map[string]map[string]interface{} `mapstructure:"notifiers"`
 	AwsConfig        AwsConfig                         `mapstructure:"aws"`
-	MinioConfig      MinioConfig                       `mapstructure:"minio"`
-	Otel             Otel                              `mapstructure:"otel"`
 	LogFormat        string                            `mapstructure:"log_format"`
 	KubeConfig       string                            `mapstructure:"kubeconfig"`
 	ListenAddress    string                            `mapstructure:"listen_address"`
+	MinioConfig      MinioConfig                       `mapstructure:"minio"`
 	RulesFiles       []string                          `mapstructure:"rules_files"`
 	DefaultNotifiers []string                          `mapstructure:"default_notifiers"`
-	ListenPort       int                               `mapstructure:"listen_port"`
+	Otel             Otel                              `mapstructure:"otel"`
 	Deduplication    deduplication                     `mapstructure:"deduplication"`
+	ListenPort       int                               `mapstructure:"listen_port"`
 	WatchRules       bool                              `mapstructure:"watch_rules"`
 	PrintAllEvents   bool                              `mapstructure:"print_all_events"`
 }
@@ -84,9 +88,11 @@ func CreateConfiguration(configFile string) *Configuration {
 	v.SetDefault("print_all_events", defaultPrintAllEvents)
 	v.SetDefault("deduplication.leader_election", defaultDeduplicationLeaderElection)
 	v.SetDefault("deduplication.time_window_seconds", defaultDeduplicationTimeWindow)
-	v.SetDefault("otel.enabled", defaultOtelCollectorEnabled)
+	v.SetDefault("otel.traces_enabled", defaultOtelCollectorTracesEnabled)
+	v.SetDefault("otel.metrics_enabled", defaultOtelCollectorMetricsEnabled)
 	v.SetDefault("otel.collector_endpoint", defaultOtelCollectorEndpoint)
 	v.SetDefault("otel.collector_port", defaultOtelCollectorPort)
+	v.Set("otel.timeout", defaultOtelCollectorGRPCTimeout)
 	v.SetDefault("otel.collector_use_insecure_grpc", defaultOtelCollectorUseInsecureGrpc)
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	v.AutomaticEnv()

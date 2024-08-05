@@ -265,6 +265,8 @@ var serverCmd = &cobra.Command{
 			}
 		}()
 
+		metrics.Init()
+
 		if err := srv.ListenAndServe(); err != nil {
 			utils.PrintLog("fatal", utils.LogLine{Error: err.Error(), Message: "http"})
 		}

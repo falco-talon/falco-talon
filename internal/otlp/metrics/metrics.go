@@ -2,11 +2,14 @@ package metrics
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc"
 	"go.opentelemetry.io/otel/exporters/prometheus"
 	"go.opentelemetry.io/otel/metric"
 	sdk "go.opentelemetry.io/otel/sdk/metric"
@@ -28,22 +31,38 @@ var (
 )
 var ctx context.Context
 
-func init() {
+func Init() {
 	ctx = context.Background()
+	config := configuration.GetConfiguration()
+
 	exporter, err := prometheus.New()
 	if err != nil {
 		utils.PrintLog("fatal", utils.LogLine{Error: err.Error(), Message: "init"})
 		log.Fatal(err)
 	}
+
 	resources := resource.NewWithAttributes(
 		semconv.SchemaURL,
 		semconv.ServiceNameKey.String("falco-talon"),
 		semconv.ServiceVersionKey.String(configuration.GetInfo().GitVersion),
 	)
-	provider := sdk.NewMeterProvider(
-		sdk.WithReader(exporter),
-		sdk.WithResource(resources),
-	)
+
+	var metricOpts []sdk.Option
+
+	if config.Otel.MetricsEnabled {
+		otlpExporter, err2 := newOtlpMetricExporter(config)
+		if err2 != nil {
+			utils.PrintLog("fatal", utils.LogLine{Error: err2.Error(), Message: "init"})
+			log.Fatal(err2)
+		}
+		metricOpts = append(metricOpts, sdk.WithReader(sdk.NewPeriodicReader(otlpExporter)))
+	}
+
+	metricOpts = append(metricOpts, sdk.WithReader(exporter))
+	metricOpts = append(metricOpts, sdk.WithResource(resources))
+
+	provider := sdk.NewMeterProvider(metricOpts...)
+
 	meter := provider.Meter(
 		meterName,
 		metric.WithInstrumentationVersion(configuration.GetInfo().GitVersion),
@@ -54,6 +73,27 @@ func init() {
 	actionCounter, _ = meter.Int64Counter("action", metric.WithDescription("number of actions"))
 	notificationCounter, _ = meter.Int64Counter("notification", metric.WithDescription("number of notifications"))
 	outputCounter, _ = meter.Int64Counter("output", metric.WithDescription("number of outputs"))
+}
+
+func newOtlpMetricExporter(cfg *configuration.Configuration) (sdk.Exporter, error) {
+	endpoint := fmt.Sprintf("%s:%s", configuration.GetConfiguration().Otel.CollectorEndpoint, configuration.GetConfiguration().Otel.CollectorPort)
+	insecure := cfg.Otel.CollectorUseInsecureGrpc
+
+	var otlpmetricgrpcOpts []otlpmetricgrpc.Option
+
+	if insecure {
+		otlpmetricgrpcOpts = append(otlpmetricgrpcOpts, otlpmetricgrpc.WithInsecure())
+	}
+
+	otlpmetricgrpcOpts = append(otlpmetricgrpcOpts, otlpmetricgrpc.WithEndpoint(endpoint))
+	otlpmetricgrpcOpts = append(otlpmetricgrpcOpts, otlpmetricgrpc.WithTimeout(time.Duration(cfg.Otel.Timeout)*time.Second))
+	otlpmetricgrpcOpts = append(otlpmetricgrpcOpts, otlpmetricgrpc.WithRetry(otlpmetricgrpc.RetryConfig{
+		Enabled:        true,
+		MaxInterval:    2 * time.Second,
+		MaxElapsedTime: 10 * time.Second,
+	}))
+
+	return otlpmetricgrpc.New(ctx, otlpmetricgrpcOpts...)
 }
 
 func IncreaseCounter(log utils.LogLine) {
