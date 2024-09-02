@@ -14,6 +14,8 @@ import (
 	"github.com/falco-talon/falco-talon/internal/otlp/traces"
 
 	lambdaInvoke "github.com/falco-talon/falco-talon/actionners/aws/lambda"
+	"github.com/falco-talon/falco-talon/actionners/webhook"
+	"github.com/falco-talon/falco-talon/internal/http"
 	"github.com/falco-talon/falco-talon/outputs"
 
 	"go.opentelemetry.io/otel/attribute"
@@ -211,6 +213,15 @@ func GetDefaultActionners() *Actionners {
 				RequireOutput:           true,
 			},
 			&Actionner{
+				Category:        "webhook",
+				Name:            "call",
+				DefaultContinue: true,
+				Init:            http.Init,
+				Checks:          []checkActionner{},
+				CheckParameters: webhook.CheckParameters,
+				Action:          webhook.Action,
+			},
+			&Actionner{
 				Category:        "aws",
 				Name:            "lambda",
 				DefaultContinue: false,
@@ -266,17 +277,16 @@ func Init() error {
 	}
 
 	for category := range categories {
+		utils.PrintLog("info", utils.LogLine{Message: "init", ActionnerCategory: category})
 		for _, actionner := range *availableActionners {
 			if category == actionner.Category {
 				if actionner.Init != nil {
-					utils.PrintLog("info", utils.LogLine{Message: "init", ActionnerCategory: actionner.Category})
 					if err := actionner.Init(); err != nil {
 						utils.PrintLog("error", utils.LogLine{Message: "init", Error: err.Error(), ActionnerCategory: actionner.Category})
 						return err
 					}
-					enabledCategories[category] = true
 				}
-				break // we break to avoid to repeat the same init() several times
+				enabledCategories[category] = true
 			}
 		}
 	}

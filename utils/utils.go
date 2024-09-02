@@ -249,6 +249,10 @@ func AddCustomValidation(tag string, fn validator.Func) error {
 	return nil
 }
 
+func AddCustomStructValidation(s interface{}, fn validator.StructLevelFunc) {
+	validate.RegisterStructValidation(fn, s)
+}
+
 func DecodeParams(params map[string]interface{}, result interface{}) error {
 	// Decode parameters into the struct
 	decoder, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
