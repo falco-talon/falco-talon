@@ -101,12 +101,51 @@ func (a Actionner) Checks(_ *events.Event, action *rules.Action) error {
 	if err != nil {
 		return err
 	}
+	// would be nice to pass the client here so we can easily test that function
 	return awsChecks.CheckLambdaExist.Run(awsChecks.CheckLambdaExist{}, parameters.AWSLambdaName)
 }
 
 func (a Actionner) Run(event *events.Event, action *rules.Action) (utils.LogLine, *models.Data, error) {
 	lambdaClient := aws.GetLambdaClient()
+	return a.RunWithClient(lambdaClient, event, action)
+}
 
+func (a Actionner) CheckParameters(action *rules.Action) error {
+	var parameters Parameters
+	err := utils.DecodeParams(action.GetParameters(), &parameters)
+	if err != nil {
+		return err
+	}
+
+	err = utils.ValidateStruct(parameters)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GetInvocationType(invocationType string) types.InvocationType {
+	switch invocationType {
+	case "RequestResponse":
+		return types.InvocationTypeRequestResponse
+	case "Event":
+		return types.InvocationTypeEvent
+	case "DryRun":
+		return types.InvocationTypeDryRun
+	default:
+		return types.InvocationTypeRequestResponse // Default
+	}
+}
+
+func GetLambdaVersion(qualifier *string) *string {
+	if qualifier == nil || *qualifier == "" {
+		defaultVal := "$LATEST"
+		return &defaultVal
+	}
+	return qualifier
+}
+
+func (a Actionner) RunWithClient(client aws.LambdaClientAPI, event *events.Event, action *rules.Action) (utils.LogLine, *models.Data, error) {
 	var parameters Parameters
 	err := utils.DecodeParams(action.GetParameters(), &parameters)
 	if err != nil {
@@ -134,12 +173,12 @@ func (a Actionner) Run(event *events.Event, action *rules.Action) (utils.LogLine
 	input := &lambda.InvokeInput{
 		FunctionName:   &parameters.AWSLambdaName,
 		ClientContext:  nil,
-		InvocationType: getInvocationType(parameters.AWSLambdaInvocationType),
+		InvocationType: GetInvocationType(parameters.AWSLambdaInvocationType),
 		Payload:        payload,
-		Qualifier:      getLambdaVersion(&parameters.AWSLambdaAliasOrVersion),
+		Qualifier:      GetLambdaVersion(&parameters.AWSLambdaAliasOrVersion),
 	}
 
-	lambdaOutput, err := lambdaClient.Invoke(context.Background(), input)
+	lambdaOutput, err := client.Invoke(context.Background(), input)
 	if err != nil {
 		return utils.LogLine{
 			Objects: objects,
@@ -157,39 +196,4 @@ func (a Actionner) Run(event *events.Event, action *rules.Action) (utils.LogLine
 		Output:  string(lambdaOutput.Payload),
 		Status:  status,
 	}, nil, nil
-}
-
-func (a Actionner) CheckParameters(action *rules.Action) error {
-	var parameters Parameters
-	err := utils.DecodeParams(action.GetParameters(), &parameters)
-	if err != nil {
-		return err
-	}
-
-	err = utils.ValidateStruct(parameters)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func getInvocationType(invocationType string) types.InvocationType {
-	switch invocationType {
-	case "RequestResponse":
-		return types.InvocationTypeRequestResponse
-	case "Event":
-		return types.InvocationTypeEvent
-	case "DryRun":
-		return types.InvocationTypeDryRun
-	default:
-		return types.InvocationTypeRequestResponse // Default
-	}
-}
-
-func getLambdaVersion(qualifier *string) *string {
-	if qualifier == nil || *qualifier == "" {
-		defaultVal := "$LATEST"
-		return &defaultVal
-	}
-	return qualifier
 }

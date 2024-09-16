@@ -17,8 +17,13 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 )
 
+type LambdaClientAPI interface {
+	Invoke(ctx context.Context, input *lambda.InvokeInput, optFns ...func(*lambda.Options)) (*lambda.InvokeOutput, error)
+	GetFunction(ctx context.Context, params *lambda.GetFunctionInput, optFns ...func(*lambda.Options)) (*lambda.GetFunctionOutput, error)
+}
+
 type AWSClient struct {
-	lambdaClient *lambda.Client
+	lambdaClient LambdaClientAPI
 	imdsClient   *imds.Client
 	s3Client     *s3.Client
 	cfg          aws.Config
@@ -90,7 +95,7 @@ func GetAWSClient() *AWSClient {
 	return awsClient
 }
 
-func GetLambdaClient() *lambda.Client {
+func GetLambdaClient() LambdaClientAPI {
 	c := GetAWSClient()
 	if c == nil {
 		return nil
