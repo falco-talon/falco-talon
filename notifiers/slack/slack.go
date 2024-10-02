@@ -25,11 +25,11 @@ const (
 )
 
 const (
-	Red   string = "#e20b0b"
-	Green string = "#23ba47"
-	Grey  string = "#a4a8b1"
-
-	ignoredStr string = "ignored"
+	Red            string = "#e20b0b"
+	Green          string = "#23ba47"
+	Grey           string = "#a4a8b1"
+	threeBackticks        = "```"
+	ignoredStr     string = "ignored"
 )
 
 type Parameters struct {
@@ -190,7 +190,7 @@ func newPayload(log utils.LogLine) Payload {
 		}
 		if log.Event != "" {
 			field.Title = "Event"
-			field.Value = "```" + log.Event + "```"
+			field.Value = threeBackticks + log.Event + threeBackticks
 			field.Short = false
 			fields = append(fields, field)
 		}
