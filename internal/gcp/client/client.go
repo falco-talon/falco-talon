@@ -99,7 +99,7 @@ func Init() error {
 			httpClient: &http.Client{},
 		}
 
-		utils.PrintLog("info", utils.LogLine{Message: "GCP client options initialized"})
+		utils.PrintLog("info", utils.LogLine{Message: "init", Category: "gcp", Status: utils.SuccessStr})
 	})
 
 	return initErr
