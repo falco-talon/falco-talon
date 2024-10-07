@@ -33,11 +33,11 @@ const (
 		"roles/cloudfunctions.invoker"
 	}`
 	Example string = `- action: Invoke GCP Cloud Function
-	actionner: gcp:function
-	parameters:
-	  gcp_function_name: sample-function
-	  gcp_function_location: us-central1
-      gcp_function_timeout: 10
+  actionner: gcp:function
+  parameters:
+    gcp_function_name: sample-function
+    gcp_function_location: us-central1
+    gcp_function_timeout: 10
 	`
 )
 
@@ -145,7 +145,7 @@ func (a Actionner) RunWithClient(c client.GCPClientAPI, event *events.Event, act
 	gcpFunctionClient, err := c.GetGcpFunctionClient(context.Background())
 	if err != nil {
 		return utils.LogLine{
-			Objects: nil,
+			Objects: objects,
 			Error:   err.Error(),
 			Status:  utils.FailureStr,
 		}, nil, err
