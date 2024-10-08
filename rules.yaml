@@ -1,5 +1,8 @@
 - action: Terminate Pod
   actionner: kubernetes:terminate
+  parameters:
+    grace_period_seconds: 5
+    ignore_standalone_pods: true
 
 - action: Disable outbound connections
   actionner: kubernetes:networkpolicy
@@ -50,7 +53,7 @@
     output_fields:
       - k8s.ns.name!=kube-system, k8s.ns.name!=falco
   actions:
-    - action: Label Pod as Suspicious
+    - action: Terminate Pod
 
 - rule: Test invoke lambda
   match:

@@ -50,6 +50,7 @@ rules:
     grace_period_seconds: 5
     ignore_daemonsets: true
     ignore_statefulsets: true
+	ignore_standalone_pods: true
     min_healthy_replicas: 33%
 `
 )
@@ -59,10 +60,11 @@ var (
 )
 
 type Parameters struct {
-	MinHealthyReplicas string `mapstructure:"min_healthy_replicas" validate:"omitempty,is_absolut_or_percent"`
-	IgnoreDaemonsets   bool   `mapstructure:"ignore_daemonsets" validate:"omitempty"`
-	IgnoreStatefulSets bool   `mapstructure:"ignore_statefulsets" validate:"omitempty"`
-	GracePeriodSeconds int    `mapstructure:"grace_period_seconds" validate:"omitempty"`
+	MinHealthyReplicas   string `mapstructure:"min_healthy_replicas" validate:"omitempty,is_absolut_or_percent"`
+	IgnoreDaemonsets     bool   `mapstructure:"ignore_daemonsets" validate:"omitempty"`
+	IgnoreStatefulSets   bool   `mapstructure:"ignore_statefulsets" validate:"omitempty"`
+	IgnoreStandalonePods bool   `mapstructure:"ignore_standalone_pods" validate:"omitempty"`
+	GracePeriodSeconds   int    `mapstructure:"grace_period_seconds" validate:"omitempty"`
 }
 
 type Actionner struct{}
@@ -92,10 +94,11 @@ func (a Actionner) Information() models.Information {
 }
 func (a Actionner) Parameters() models.Parameters {
 	return Parameters{
-		MinHealthyReplicas: "",
-		IgnoreDaemonsets:   false,
-		IgnoreStatefulSets: false,
-		GracePeriodSeconds: 0,
+		MinHealthyReplicas:   "",
+		IgnoreDaemonsets:     false,
+		IgnoreStatefulSets:   false,
+		IgnoreStandalonePods: true,
+		GracePeriodSeconds:   0,
 	}
 }
 
@@ -137,16 +140,7 @@ func (a Actionner) Run(event *events.Event, action *rules.Action) (utils.LogLine
 			err
 	}
 
-	ownerKind, err := k8s.GetOwnerKind(*pod)
-	if err != nil {
-		return utils.LogLine{
-				Objects: objects,
-				Error:   err.Error(),
-				Status:  utils.FailureStr,
-			},
-			nil,
-			err
-	}
+	ownerKind := k8s.PodKind(*pod)
 
 	switch ownerKind {
 	case utils.DaemonSetStr:
@@ -225,6 +219,14 @@ func (a Actionner) Run(event *events.Event, action *rules.Action) (utils.LogLine
 					}, nil, nil
 				}
 			}
+		}
+	case utils.StandalonePodStr:
+		if parameters.IgnoreStandalonePods {
+			return utils.LogLine{
+				Objects: objects,
+				Status:  "ignored",
+				Result:  fmt.Sprintf("the pod '%v' in the namespace '%v' is a standalone pod and will be ignored.", podName, namespace),
+			}, nil, nil
 		}
 	}
 
