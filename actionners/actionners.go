@@ -20,6 +20,7 @@ import (
 	lambdaInvoke "github.com/falco-talon/falco-talon/actionners/aws/lambda"
 	calicoNetworkpolicy "github.com/falco-talon/falco-talon/actionners/calico/networkpolicy"
 	ciliumNetworkpolicy "github.com/falco-talon/falco-talon/actionners/cilium/networkpolicy"
+	gcpFunctionCall "github.com/falco-talon/falco-talon/actionners/gcp/function"
 	k8sCordon "github.com/falco-talon/falco-talon/actionners/kubernetes/cordon"
 	k8sDelete "github.com/falco-talon/falco-talon/actionners/kubernetes/delete"
 	k8sDownload "github.com/falco-talon/falco-talon/actionners/kubernetes/download"
@@ -81,6 +82,7 @@ func ListDefaultActionners() *Actionners {
 			k8sDownload.Register(),
 			k8sTcpdump.Register(),
 			lambdaInvoke.Register(),
+			gcpFunctionCall.Register(),
 			calicoNetworkpolicy.Register(),
 			ciliumNetworkpolicy.Register(),
 		)

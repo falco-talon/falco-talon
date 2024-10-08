@@ -4,7 +4,8 @@ import (
 	"github.com/falco-talon/falco-talon/internal/rules"
 	awss3 "github.com/falco-talon/falco-talon/outputs/aws/s3"
 	"github.com/falco-talon/falco-talon/outputs/file"
-	minio "github.com/falco-talon/falco-talon/outputs/minio"
+	"github.com/falco-talon/falco-talon/outputs/gcs"
+	"github.com/falco-talon/falco-talon/outputs/minio"
 
 	"github.com/falco-talon/falco-talon/internal/models"
 	"github.com/falco-talon/falco-talon/utils"
@@ -36,6 +37,7 @@ func ListDefaultOutputs() *Outputs {
 			file.Register(),
 			minio.Register(),
 			awss3.Register(),
+			gcs.Register(),
 		)
 	}
 
