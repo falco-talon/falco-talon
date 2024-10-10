@@ -126,7 +126,7 @@ rules:
   - apiGroups:
       - "projectcalico.org"
     resources:
-      - caliconetworkpolicies
+      - networkpolicies
     verbs:
 {{ toYaml .Values.rbac.caliconetworkpolicies | indent 6 }}
   {{- end }}
@@ -134,7 +134,7 @@ rules:
   - apiGroups:
       - "cilium.io"
     resources:
-      - ciliumnetworkpolicies
+      - networkpolicies
     verbs:
 {{ toYaml .Values.rbac.ciliumnetworkpolicies | indent 6 }}
   {{- end }}

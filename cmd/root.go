@@ -36,6 +36,10 @@ func init() {
 	actionnersCmd.AddCommand(actionnersListCmd)
 	outputsCmd.AddCommand(outputsListCmd)
 	notifiersCmd.AddCommand(notifiersListCmd)
-	RootCmd.PersistentFlags().StringP("config", "c", "/etc/falco-talon/config.yaml", "Falco Talon Config File")
-	RootCmd.PersistentFlags().StringArrayP("rules", "r", []string{"/etc/falco-talon/rules.yaml"}, "Falco Talon Rules File")
+	RootCmd.PersistentFlags().StringArrayP("rules", "r", []string{}, "Falco Talon Rules File")
+	serverCmd.Flags().StringP("config", "c", "/etc/falco-talon/config.yaml", "Falco Talon Config File")
+	rulesCmd.PersistentFlags().StringP("config", "c", "", "Falco Talon Config File")
+	actionnersCmd.PersistentFlags().StringP("config", "c", "", "Falco Talon Config File")
+	outputsCmd.PersistentFlags().StringP("config", "c", "", "Falco Talon Config File")
+	notifiersCmd.PersistentFlags().StringP("config", "c", "", "Falco Talon Config File")
 }
