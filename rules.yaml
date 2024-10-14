@@ -1,5 +1,8 @@
 - action: Terminate Pod
   actionner: kubernetes:terminate
+  parameters:
+    grace_period_seconds: 5
+    ignore_standalone_pods: true
 
 - action: Disable outbound connections
   actionner: kubernetes:networkpolicy
@@ -31,6 +34,14 @@
     aws_lambda_alias_or_version: $LATEST
     aws_lambda_invocation_type: RequestResponse
 
+- action: Invoke GCP function
+  actionner: gcp:function
+  additional_contexts:
+    - aws
+  parameters:
+    gcp_function_name: simple-http-function
+    gcp_function_location: us-central1
+
 - rule: Suspicious outbound connection
   description: "Label pods with suspicious outbound connections if not in the kube-system"
   match:
@@ -50,7 +61,7 @@
     output_fields:
       - k8s.ns.name!=kube-system, k8s.ns.name!=falco
   actions:
-    - action: Label Pod as Suspicious
+    - action: Terminate Pod
 
 - rule: Test invoke lambda
   match:
@@ -58,6 +69,13 @@
        - Test invoke lambda
   actions:
      - action: Invoke Lambda function
+
+- rule: Test invoke GCP function
+  match:
+    rules:
+      - Test invoke GCP function
+  actions:
+    - action: Invoke GCP function
 
 - rule: Delete unknown namespace
   match:

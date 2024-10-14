@@ -220,13 +220,7 @@ func (a Actionner) RunWithClient(client k8s.DrainClient, event *events.Event, ac
 		go func(pod corev1.Pod) {
 			defer wg.Done()
 
-			ownerKind, err := k8s.GetOwnerKind(p)
-			if err != nil {
-				utils.PrintLog("warning", utils.LogLine{Message: fmt.Sprintf("error getting pod '%v' owner kind: %v", p.Name, err)})
-				atomic.AddInt32(&otherErrorsCount, 1)
-				return
-			}
-
+			ownerKind := k8s.PodKind(p)
 			switch ownerKind {
 			case utils.DaemonSetStr:
 				if parameters.IgnoreDaemonsets {

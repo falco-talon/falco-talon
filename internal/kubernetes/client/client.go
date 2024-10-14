@@ -541,11 +541,13 @@ func (client Client) EvictPod(pod corev1.Pod) error {
 	return nil
 }
 
-func GetOwnerKind(pod corev1.Pod) (string, error) {
+// PodKind returns the type of the pod
+// if no owner reference is found, the pod is considered as a standalone pod
+func PodKind(pod corev1.Pod) string {
 	if len(pod.OwnerReferences) == 0 {
-		return "", fmt.Errorf("no owner reference found")
+		return utils.StandalonePodStr
 	}
-	return pod.OwnerReferences[0].Kind, nil
+	return pod.OwnerReferences[0].Kind
 }
 
 func GetOwnerName(pod corev1.Pod) (string, error) {
