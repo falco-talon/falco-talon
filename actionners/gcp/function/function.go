@@ -30,7 +30,8 @@ const (
 	AllowOutput   bool   = false
 	RequireOutput bool   = false
 	Permissions   string = `{
-		"roles/cloudfunctions.invoker"
+		"cloudfunctions.functions.get",
+		"cloudfunctions.functions.invoke"
 	}`
 	Example string = `- action: Invoke GCP Cloud Function
   actionner: gcp:function
