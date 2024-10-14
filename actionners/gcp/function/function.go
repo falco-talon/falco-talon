@@ -210,7 +210,7 @@ func (a Actionner) RunWithClient(c client.GCPClientAPI, event *events.Event, act
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+token.AccessToken)
 
-	if parameters.GCPFunctionTimeout != 0 {
+	if parameters.GCPFunctionTimeout > 0 {
 		httpClient := http.Client{
 			Timeout: time.Duration(parameters.GCPFunctionTimeout),
 		}
