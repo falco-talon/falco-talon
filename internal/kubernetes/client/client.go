@@ -32,8 +32,8 @@ import (
 
 	klog "k8s.io/klog/v2"
 
-	"github.com/falco-talon/falco-talon/configuration"
-	"github.com/falco-talon/falco-talon/utils"
+	"github.com/falcosecurity/falco-talon/configuration"
+	"github.com/falcosecurity/falco-talon/utils"
 )
 
 type Client struct {

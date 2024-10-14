@@ -6,7 +6,7 @@ import (
 	awssdk "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
 
-	aws "github.com/falco-talon/falco-talon/internal/aws/client"
+	aws "github.com/falcosecurity/falco-talon/internal/aws/client"
 )
 
 type CheckLambdaExist struct{}

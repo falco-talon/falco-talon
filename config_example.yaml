@@ -39,7 +39,7 @@ notifiers:
     webhook_url: "https://hooks.slack.com/services/XXXX"
     # icon: "" # default: "https://upload.wikimedia.org/wikipedia/commons/2/26/Circaetus_gallicus_claw.jpg"
     # username: "" # default: "Falco Talon"
-    footer: "" # default: "https://github.com/falco-talon/falco-talon"
+    footer: "" # default: "https://github.com/falcosecurity/falco-talon"
     format: long # default: long
   # webhook:
   #   url: ""

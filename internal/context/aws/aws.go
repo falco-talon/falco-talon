@@ -3,8 +3,8 @@ package aws
 import (
 	"context"
 
-	aws "github.com/falco-talon/falco-talon/internal/aws/client"
-	"github.com/falco-talon/falco-talon/internal/events"
+	aws "github.com/falcosecurity/falco-talon/internal/aws/client"
+	"github.com/falcosecurity/falco-talon/internal/events"
 )
 
 func GetAwsContext(_ *events.Event) (map[string]any, error) {

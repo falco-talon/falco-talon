@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
 
-	"github.com/falco-talon/falco-talon/notifiers"
+	"github.com/falcosecurity/falco-talon/notifiers"
 )
 
 var notifiersCmd = &cobra.Command{

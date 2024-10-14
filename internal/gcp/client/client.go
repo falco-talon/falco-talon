@@ -13,8 +13,8 @@ import (
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/option"
 
-	"github.com/falco-talon/falco-talon/configuration"
-	"github.com/falco-talon/falco-talon/utils"
+	"github.com/falcosecurity/falco-talon/configuration"
+	"github.com/falcosecurity/falco-talon/utils"
 )
 
 const functionServiceScope = "https://www.googleapis.com/auth/cloud-platform"

@@ -4,7 +4,7 @@
 
 React to the events from Falco
 
-**Homepage:** <https://github.com/falco-talon/falco-talon>
+**Homepage:** <https://github.com/falcosecurity/falco-talon>
 
 ## Maintainers
 
@@ -14,14 +14,14 @@ React to the events from Falco
 
 ## Source Code
 
-* <https://github.com/falco-talon/falco-talon>
+* <https://github.com/falcosecurity/falco-talon>
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | object | `{}` | affinity |
-| config | object | `{"aws":{"accesKey":"","externalId":"","region":"","roleArn":"","secretKey":""},"deduplication":{"leaderElection":true,"timeWindowSeconds":5},"defaultNotifiers":["k8sevents"],"listenAddress":"0.0.0.0","listenPort":2803,"minio":{"accessKey":"","endpoint":"","secretKey":"","useSsl":false},"notifiers":{"elasticsearch":{"createIndexTemplate":true,"numberOfReplicas":1,"numberOfShards":1,"url":""},"loki":{"apiKey":"","customHeaders":[],"hostPort":"","tenant":"","user":""},"slack":{"footer":"https://github.com/falco-talon/falco-talon","format":"long","icon":"https://upload.wikimedia.org/wikipedia/commons/2/26/Circaetus_gallicus_claw.jpg","username":"Falco Talon","webhookUrl":""},"smtp":{"format":"html","from":"","hostPort":"","password":"","tls":false,"to":"","user":""},"webhook":{"url":""}},"otel":{"collectorEndpoint":"","collectorPort":4317,"collectorUseInsecureGrpc":false,"metricsEnabled":false,"tracesEnabled":false},"printAllEvents":false,"rulesFiles":["rules.yaml","rules_override.yaml"],"watchRules":true}` | config of Falco Talon (See https://docs.falco-talon.org/docs/configuration/) |
+| config | object | `{"aws":{"accesKey":"","externalId":"","region":"","roleArn":"","secretKey":""},"deduplication":{"leaderElection":true,"timeWindowSeconds":5},"defaultNotifiers":["k8sevents"],"listenAddress":"0.0.0.0","listenPort":2803,"minio":{"accessKey":"","endpoint":"","secretKey":"","useSsl":false},"notifiers":{"elasticsearch":{"createIndexTemplate":true,"numberOfReplicas":1,"numberOfShards":1,"url":""},"loki":{"apiKey":"","customHeaders":[],"hostPort":"","tenant":"","user":""},"slack":{"footer":"https://github.com/falcosecurity/falco-talon","format":"long","icon":"https://upload.wikimedia.org/wikipedia/commons/2/26/Circaetus_gallicus_claw.jpg","username":"Falco Talon","webhookUrl":""},"smtp":{"format":"html","from":"","hostPort":"","password":"","tls":false,"to":"","user":""},"webhook":{"url":""}},"otel":{"collectorEndpoint":"","collectorPort":4317,"collectorUseInsecureGrpc":false,"metricsEnabled":false,"tracesEnabled":false},"printAllEvents":false,"rulesFiles":["rules.yaml","rules_override.yaml"],"watchRules":true}` | config of Falco Talon (See https://docs.falco-talon.org/docs/configuration/) |
 | config.aws | object | `{"accesKey":"","externalId":"","region":"","roleArn":"","secretKey":""}` | aws |
 | config.aws.accesKey | string | `""` | access key (if not specified, default access_key from provider credential chain will be used) |
 | config.aws.externalId | string | `""` | external id |
@@ -39,7 +39,7 @@ React to the events from Falco
 | config.minio.endpoint | string | `""` | endpoint |
 | config.minio.secretKey | string | `""` | secret key |
 | config.minio.useSsl | bool | `false` | use ssl |
-| config.notifiers | object | `{"elasticsearch":{"createIndexTemplate":true,"numberOfReplicas":1,"numberOfShards":1,"url":""},"loki":{"apiKey":"","customHeaders":[],"hostPort":"","tenant":"","user":""},"slack":{"footer":"https://github.com/falco-talon/falco-talon","format":"long","icon":"https://upload.wikimedia.org/wikipedia/commons/2/26/Circaetus_gallicus_claw.jpg","username":"Falco Talon","webhookUrl":""},"smtp":{"format":"html","from":"","hostPort":"","password":"","tls":false,"to":"","user":""},"webhook":{"url":""}}` | notifiers (See https://docs.falco-talon.org/docs/notifiers/list/ for the settings) |
+| config.notifiers | object | `{"elasticsearch":{"createIndexTemplate":true,"numberOfReplicas":1,"numberOfShards":1,"url":""},"loki":{"apiKey":"","customHeaders":[],"hostPort":"","tenant":"","user":""},"slack":{"footer":"https://github.com/falcosecurity/falco-talon","format":"long","icon":"https://upload.wikimedia.org/wikipedia/commons/2/26/Circaetus_gallicus_claw.jpg","username":"Falco Talon","webhookUrl":""},"smtp":{"format":"html","from":"","hostPort":"","password":"","tls":false,"to":"","user":""},"webhook":{"url":""}}` | notifiers (See https://docs.falco-talon.org/docs/notifiers/list/ for the settings) |
 | config.notifiers.elasticsearch | object | `{"createIndexTemplate":true,"numberOfReplicas":1,"numberOfShards":1,"url":""}` | elasticsearch |
 | config.notifiers.elasticsearch.createIndexTemplate | bool | `true` | create the index template |
 | config.notifiers.elasticsearch.numberOfReplicas | int | `1` | number of replicas |
@@ -51,8 +51,8 @@ React to the events from Falco
 | config.notifiers.loki.hostPort | string | `""` | host:port |
 | config.notifiers.loki.tenant | string | `""` | tenant |
 | config.notifiers.loki.user | string | `""` | user |
-| config.notifiers.slack | object | `{"footer":"https://github.com/falco-talon/falco-talon","format":"long","icon":"https://upload.wikimedia.org/wikipedia/commons/2/26/Circaetus_gallicus_claw.jpg","username":"Falco Talon","webhookUrl":""}` | slack |
-| config.notifiers.slack.footer | string | `"https://github.com/falco-talon/falco-talon"` | footer |
+| config.notifiers.slack | object | `{"footer":"https://github.com/falcosecurity/falco-talon","format":"long","icon":"https://upload.wikimedia.org/wikipedia/commons/2/26/Circaetus_gallicus_claw.jpg","username":"Falco Talon","webhookUrl":""}` | slack |
+| config.notifiers.slack.footer | string | `"https://github.com/falcosecurity/falco-talon"` | footer |
 | config.notifiers.slack.format | string | `"long"` | format |
 | config.notifiers.slack.icon | string | `"https://upload.wikimedia.org/wikipedia/commons/2/26/Circaetus_gallicus_claw.jpg"` | icon |
 | config.notifiers.slack.username | string | `"Falco Talon"` | username |

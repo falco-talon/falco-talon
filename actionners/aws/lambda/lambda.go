@@ -8,12 +8,12 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
 	"github.com/aws/aws-sdk-go-v2/service/lambda/types"
 
-	awsChecks "github.com/falco-talon/falco-talon/internal/aws/checks"
-	aws "github.com/falco-talon/falco-talon/internal/aws/client"
-	"github.com/falco-talon/falco-talon/internal/events"
-	"github.com/falco-talon/falco-talon/internal/models"
-	"github.com/falco-talon/falco-talon/internal/rules"
-	"github.com/falco-talon/falco-talon/utils"
+	awsChecks "github.com/falcosecurity/falco-talon/internal/aws/checks"
+	aws "github.com/falcosecurity/falco-talon/internal/aws/client"
+	"github.com/falcosecurity/falco-talon/internal/events"
+	"github.com/falcosecurity/falco-talon/internal/models"
+	"github.com/falcosecurity/falco-talon/internal/rules"
+	"github.com/falcosecurity/falco-talon/utils"
 )
 
 const (

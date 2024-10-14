@@ -1,5 +1,15 @@
  # Falco Talon
 
+[![Falco Ecosystem Repository](https://raw.githubusercontent.com/falcosecurity/evolution/refs/heads/main/repos/badges/falco-ecosystem-blue.svg)](https://github.com/falcosecurity/evolution/blob/main/REPOSITORIES.md#ecosystem-scope) [![Incubating](https://img.shields.io/badge/status-incubating-orange?style=for-the-badge)](https://github.com/falcosecurity/evolution/blob/main/REPOSITORIES.md#incubating)
+[![Last Release](https://img.shields.io/github/v/release/falcosecurity/falco-talon?style=for-the-badge)](https://github.com/falcosecurity/falco-talon/releases/latest)
+
+![last commit](https://img.shields.io/github/last-commit/falcosecurity/falco-talon?style=for-the-badge
+)
+![licence](https://img.shields.io/github/license/falcosecurity/falco-talon?style=for-the-badge
+)
+![docker pulls](https://img.shields.io/docker/pulls/falcosecurity/falco-talon?style=for-the-badge
+)
+
 `Falco Talon` is a Response Engine for managing threats in your Kubernetes. It enhances the solutions proposed by the Falco community with a no-code tailor made solution. With easy rules, you can react to `events` from [`Falco`](https://falco.org) in milliseconds.
 
 - [Falco Talon](#falco-talon)
@@ -25,7 +35,7 @@
 
 ## Architecture
 
-`Falco Talon` can receive the `events` from [`Falco`](https://falco.org) or [`Falcosidekick`](https://github.com/falcosecurity/falcosidekick):
+`Falco Talon` can receive the `events` from [`Falco`](https://falco.org) or [`Falcosidekick`](https://github.com/falcosecurity/falco-talon):
 
 ```mermaid
 flowchart LR
@@ -102,7 +112,7 @@ To generate the images to test locally you can run `mage buildImagesLocal`
 
 ### Helm
 
-The helm chart is available in the folder [`deployment/helm`](https://github.com/falco-talon/falco-talon/tree/main/deployment/helm).
+The helm chart is available in the folder [`deployment/helm`](https://github.com/falcosecurity/falco-talon/tree/main/deployment/helm).
 Two config files are provided:
 * `values.yaml` allows you to configure `Falcon Talon` and the deployment
 * `rules.yaml` contains rules to set

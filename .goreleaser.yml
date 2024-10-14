@@ -36,7 +36,7 @@ builds:
 
 kos:
   - id: falco-talon
-    repository: issif/falco-talon
+    repository: falcosecurity/falco-talon
     tags:
     - '{{.Version}}'
     - latest
@@ -48,6 +48,6 @@ kos:
 
 release:
   github:
-    owner: falco-talon
+    owner: falcosecurity
     name: falco-talon
   prerelease: auto

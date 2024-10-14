@@ -5,8 +5,8 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/falco-talon/falco-talon/internal/events"
-	k8s "github.com/falco-talon/falco-talon/internal/kubernetes/client"
+	"github.com/falcosecurity/falco-talon/internal/events"
+	k8s "github.com/falcosecurity/falco-talon/internal/kubernetes/client"
 )
 
 func CheckPodName(event *events.Event) error {

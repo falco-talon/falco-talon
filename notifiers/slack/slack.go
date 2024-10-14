@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/falco-talon/falco-talon/internal/models"
-	"github.com/falco-talon/falco-talon/notifiers/http"
-	"github.com/falco-talon/falco-talon/utils"
+	"github.com/falcosecurity/falco-talon/internal/models"
+	"github.com/falcosecurity/falco-talon/notifiers/http"
+	"github.com/falcosecurity/falco-talon/utils"
 )
 
 const (
@@ -19,7 +19,7 @@ const (
     webhook_url: "https://hooks.slack.com/services/XXXX"
     icon: "https://upload.wikimedia.org/wikipedia/commons/2/26/Circaetus_gallicus_claw.jpg"
     username: "Falco Talon"
-    footer: "https://github.com/Falco-Talon/falco-talon"
+    footer: "https://github.com/falcosecurity/falco-talon"
     format: long
 `
 )
@@ -36,7 +36,7 @@ type Parameters struct {
 	WebhookURL string `field:"webhook_url" validate:"required"`
 	Icon       string `field:"icon" default:"https://upload.wikimedia.org/wikipedia/commons/2/26/Circaetus_gallicus_claw.jpg"`
 	Username   string `field:"username" default:"Falco Talon"`
-	Footer     string `field:"footer" default:"http://github.com/falco-talon/falco-talon"`
+	Footer     string `field:"footer" default:"http://github.com/falcosecurity/falco-talon"`
 	Format     string `field:"format" default:"long"`
 }
 
@@ -92,7 +92,7 @@ func (n Notifier) Parameters() models.Parameters {
 	return Parameters{
 		Icon:     "https://upload.wikimedia.org/wikipedia/commons/2/26/Circaetus_gallicus_claw.jpg",
 		Username: "Falco Talon",
-		Footer:   "http://github.com/falco-talon/falco-talon",
+		Footer:   "http://github.com/falcosecurity/falco-talon",
 		Format:   "long",
 	}
 }

@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/falco-talon/falco-talon/utils"
+	"github.com/falcosecurity/falco-talon/utils"
 )
 
 const (

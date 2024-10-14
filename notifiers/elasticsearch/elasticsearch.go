@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/falco-talon/falco-talon/internal/models"
-	"github.com/falco-talon/falco-talon/notifiers/http"
-	"github.com/falco-talon/falco-talon/utils"
+	"github.com/falcosecurity/falco-talon/internal/models"
+	"github.com/falcosecurity/falco-talon/notifiers/http"
+	"github.com/falcosecurity/falco-talon/utils"
 )
 
 const (
@@ -27,7 +27,7 @@ notifiers:
     webhook_url: "https://hooks.slack.com/services/XXXX"
     icon: "https://upload.wikimedia.org/wikipedia/commons/2/26/Circaetus_gallicus_claw.jpg"
     username: "Falco Talon"
-    footer: "https://github.com/Falco-Talon/falco-talon"
+    footer: "https://github.com/falcosecurity/falco-talon"
     format: long
 `
 )

@@ -16,11 +16,11 @@ import (
 	"go.opentelemetry.io/otel/sdk/resource"
 	semconv "go.opentelemetry.io/otel/semconv/v1.24.0"
 
-	"github.com/falco-talon/falco-talon/configuration"
-	"github.com/falco-talon/falco-talon/utils"
+	"github.com/falcosecurity/falco-talon/configuration"
+	"github.com/falcosecurity/falco-talon/utils"
 )
 
-const meterName = "github.com/falco-talon/falco-talon"
+const meterName = "github.com/falcosecurity/falco-talon"
 const metricPrefix = "falcosecurity_falco_talon_"
 
 var (

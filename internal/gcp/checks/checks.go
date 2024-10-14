@@ -5,7 +5,7 @@ import (
 
 	"cloud.google.com/go/functions/apiv2/functionspb"
 
-	"github.com/falco-talon/falco-talon/internal/gcp/client"
+	"github.com/falcosecurity/falco-talon/internal/gcp/client"
 )
 
 type CheckFunctionExist struct{}

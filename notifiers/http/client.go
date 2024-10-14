@@ -11,7 +11,7 @@ import (
 	"net/url"
 	"regexp"
 
-	"github.com/falco-talon/falco-talon/utils"
+	"github.com/falcosecurity/falco-talon/utils"
 )
 
 var ErrHeaderMissing = errors.New("header missing")                   // ErrHeaderMissing = 400

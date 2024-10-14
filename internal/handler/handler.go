@@ -13,12 +13,12 @@ import (
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/trace"
 
-	"github.com/falco-talon/falco-talon/configuration"
-	"github.com/falco-talon/falco-talon/internal/events"
-	"github.com/falco-talon/falco-talon/internal/nats"
-	"github.com/falco-talon/falco-talon/internal/otlp/metrics"
-	"github.com/falco-talon/falco-talon/internal/otlp/traces"
-	"github.com/falco-talon/falco-talon/utils"
+	"github.com/falcosecurity/falco-talon/configuration"
+	"github.com/falcosecurity/falco-talon/internal/events"
+	"github.com/falcosecurity/falco-talon/internal/nats"
+	"github.com/falcosecurity/falco-talon/internal/otlp/metrics"
+	"github.com/falcosecurity/falco-talon/internal/otlp/traces"
+	"github.com/falcosecurity/falco-talon/utils"
 )
 
 func MainHandler(w http.ResponseWriter, r *http.Request) {

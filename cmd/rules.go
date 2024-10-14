@@ -3,11 +3,11 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/falco-talon/falco-talon/actionners"
-	"github.com/falco-talon/falco-talon/configuration"
-	ruleengine "github.com/falco-talon/falco-talon/internal/rules"
-	"github.com/falco-talon/falco-talon/outputs"
-	"github.com/falco-talon/falco-talon/utils"
+	"github.com/falcosecurity/falco-talon/actionners"
+	"github.com/falcosecurity/falco-talon/configuration"
+	ruleengine "github.com/falcosecurity/falco-talon/internal/rules"
+	"github.com/falcosecurity/falco-talon/outputs"
+	"github.com/falcosecurity/falco-talon/utils"
 
 	"github.com/jinzhu/copier"
 	"github.com/spf13/cobra"

@@ -1,8 +1,8 @@
 package kubernetes
 
 import (
-	"github.com/falco-talon/falco-talon/internal/events"
-	kubernetes "github.com/falco-talon/falco-talon/internal/kubernetes/client"
+	"github.com/falcosecurity/falco-talon/internal/events"
+	kubernetes "github.com/falcosecurity/falco-talon/internal/kubernetes/client"
 )
 
 func GetNodeContext(event *events.Event) (map[string]any, error) {

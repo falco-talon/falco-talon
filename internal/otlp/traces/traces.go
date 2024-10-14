@@ -12,9 +12,9 @@ import (
 	semconv "go.opentelemetry.io/otel/semconv/v1.24.0"
 	oteltrace "go.opentelemetry.io/otel/trace"
 
-	"github.com/falco-talon/falco-talon/utils"
+	"github.com/falcosecurity/falco-talon/utils"
 
-	"github.com/falco-talon/falco-talon/configuration"
+	"github.com/falcosecurity/falco-talon/configuration"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"

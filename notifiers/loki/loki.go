@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/falco-talon/falco-talon/internal/models"
-	"github.com/falco-talon/falco-talon/notifiers/http"
-	"github.com/falco-talon/falco-talon/utils"
+	"github.com/falcosecurity/falco-talon/internal/models"
+	"github.com/falcosecurity/falco-talon/notifiers/http"
+	"github.com/falcosecurity/falco-talon/utils"
 )
 
 const (

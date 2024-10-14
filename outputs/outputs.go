@@ -1,14 +1,14 @@
 package outputs
 
 import (
-	"github.com/falco-talon/falco-talon/internal/rules"
-	awss3 "github.com/falco-talon/falco-talon/outputs/aws/s3"
-	"github.com/falco-talon/falco-talon/outputs/file"
-	"github.com/falco-talon/falco-talon/outputs/gcs"
-	"github.com/falco-talon/falco-talon/outputs/minio"
+	"github.com/falcosecurity/falco-talon/internal/rules"
+	awss3 "github.com/falcosecurity/falco-talon/outputs/aws/s3"
+	"github.com/falcosecurity/falco-talon/outputs/file"
+	"github.com/falcosecurity/falco-talon/outputs/gcs"
+	minio "github.com/falcosecurity/falco-talon/outputs/minio"
 
-	"github.com/falco-talon/falco-talon/internal/models"
-	"github.com/falco-talon/falco-talon/utils"
+	"github.com/falcosecurity/falco-talon/internal/models"
+	"github.com/falcosecurity/falco-talon/utils"
 )
 
 type Output interface {

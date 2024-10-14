@@ -1,6 +1,6 @@
 # Falco Talon
 
-![release](https://flat.badgen.net/github/release/falco-talon/falco-talon/latest?color=green) ![last commit](https://flat.badgen.net/github/last-commit/falco-talon/falco-talon) ![licence](https://flat.badgen.net/badge/license/MIT/blue) ![docker pulls](https://flat.badgen.net/docker/pulls/issif/falco-talon?icon=docker)
+![release](https://flat.badgen.net/github/release/falcosecurity/falco-talon/latest?color=green) ![last commit](https://flat.badgen.net/github/last-commit/falcosecurity/falco-talon) ![licence](https://flat.badgen.net/badge/license/MIT/blue) ![docker pulls](https://flat.badgen.net/docker/pulls/issif/falco-talon?icon=docker)
 
 ## Description
 
@@ -16,7 +16,7 @@ The full documentation is available on its own website: [https://docs.falco-talo
 
 ## Helm
 
-The helm chart is available in the folder [`deployment/helm`](https://github.com/falco-talon/falco-talon/tree/main/deployment/helm).
+The helm chart is available in the folder [`deployment/helm`](https://github.com/falcosecurity/falco-talon/tree/main/deployment/helm).
 
 Two config files are provided:
 * `values.yaml` allows you to configure `Falcon Talon` and the deployment
@@ -25,7 +25,7 @@ Two config files are provided:
 ### Install Falco Talon
 
 ```shell
-git clone https://github.com/falco-talon/falco-talon.git
+git clone https://github.com/falcosecurity/falco-talon.git
 cd deployment/helm/
 helm upgrade -i falco-talon . -n falco --create-namespace -f values.yaml
 ```

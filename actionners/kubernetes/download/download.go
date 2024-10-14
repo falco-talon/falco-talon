@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/falco-talon/falco-talon/internal/events"
-	k8sChecks "github.com/falco-talon/falco-talon/internal/kubernetes/checks"
-	k8s "github.com/falco-talon/falco-talon/internal/kubernetes/client"
-	"github.com/falco-talon/falco-talon/internal/models"
-	"github.com/falco-talon/falco-talon/internal/rules"
-	"github.com/falco-talon/falco-talon/utils"
+	"github.com/falcosecurity/falco-talon/internal/events"
+	k8sChecks "github.com/falcosecurity/falco-talon/internal/kubernetes/checks"
+	k8s "github.com/falcosecurity/falco-talon/internal/kubernetes/client"
+	"github.com/falcosecurity/falco-talon/internal/models"
+	"github.com/falcosecurity/falco-talon/internal/rules"
+	"github.com/falcosecurity/falco-talon/utils"
 )
 
 const (

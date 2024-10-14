@@ -9,11 +9,11 @@ import (
 	"go.opentelemetry.io/otel/codes"
 	oteltrace "go.opentelemetry.io/otel/trace"
 
-	"github.com/falco-talon/falco-talon/internal/context/aws"
-	"github.com/falco-talon/falco-talon/internal/otlp/traces"
+	"github.com/falcosecurity/falco-talon/internal/context/aws"
+	"github.com/falcosecurity/falco-talon/internal/otlp/traces"
 
-	"github.com/falco-talon/falco-talon/internal/context/kubernetes"
-	"github.com/falco-talon/falco-talon/internal/events"
+	"github.com/falcosecurity/falco-talon/internal/context/kubernetes"
+	"github.com/falcosecurity/falco-talon/internal/events"
 )
 
 func GetContext(actx context.Context, source string, event *events.Event) (map[string]any, error) {

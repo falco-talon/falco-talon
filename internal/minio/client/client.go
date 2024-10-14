@@ -6,8 +6,8 @@ import (
 	minio "github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 
-	"github.com/falco-talon/falco-talon/configuration"
-	"github.com/falco-talon/falco-talon/utils"
+	"github.com/falcosecurity/falco-talon/configuration"
+	"github.com/falcosecurity/falco-talon/utils"
 )
 
 type MinioClient struct {

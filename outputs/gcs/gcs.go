@@ -6,10 +6,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/falco-talon/falco-talon/internal/gcp/client"
-	"github.com/falco-talon/falco-talon/internal/models"
-	"github.com/falco-talon/falco-talon/internal/rules"
-	"github.com/falco-talon/falco-talon/utils"
+	"github.com/falcosecurity/falco-talon/internal/gcp/client"
+	"github.com/falcosecurity/falco-talon/internal/models"
+	"github.com/falcosecurity/falco-talon/internal/rules"
+	"github.com/falcosecurity/falco-talon/utils"
 )
 
 const (

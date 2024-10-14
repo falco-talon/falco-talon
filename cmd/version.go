@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/falco-talon/falco-talon/configuration"
+	"github.com/falcosecurity/falco-talon/configuration"
 
 	"github.com/spf13/cobra"
 )

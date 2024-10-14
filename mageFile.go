@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	repoURL string = "github.com/falco-talon/falco-talon"
+	repoURL string = "github.com/falcosecurity/falco-talon"
 )
 
 type Lint mg.Namespace
@@ -20,7 +20,7 @@ type Build mg.Namespace
 type Push mg.Namespace
 type Release mg.Namespace
 
-// lint:run runs linting
+// lint:run runs linter
 func (Lint) Run() error {
 	if err := sh.RunV("golangci-lint", "--version"); err != nil {
 		return err
@@ -34,7 +34,7 @@ func (Lint) Run() error {
 	return nil
 }
 
-// lint:fix fixes linting
+// lint:fix fixes linting issues
 func (Lint) Fix() error {
 	if err := sh.RunV("golangci-lint", "run", "--fix"); err != nil {
 		return err
@@ -42,13 +42,17 @@ func (Lint) Fix() error {
 	return nil
 }
 
-// test runs test
+// test runs tests
 func Test() error {
 	return sh.RunV("go", "test", "./...", "-race")
 }
 
 // run runs the app (with 'auto' as first argument, air is used to auto reload the app at each change)
 func Run(autoreload string) error {
+	if err := sh.RunV("air", "-v"); err != nil {
+		return err
+	}
+
 	if autoreload == "auto" {
 		return sh.RunV("air", "server", "-c", "config.yaml", "-r", "rules.yaml")
 	}
@@ -59,24 +63,20 @@ func Run(autoreload string) error {
 func (Build) Local() error {
 	ldFlags := generateLDFlags()
 
-	fmt.Println(ldFlags)
 	return sh.RunV("go", "build", "-trimpath", "-ldflags", ldFlags, "-o", "falco-talon", ".")
 }
 
-// build:images builds images and not push
+// build:images builds the images and push them the local docker daemon
 func (Build) Images() error {
 	exportLDFlags()
-	os.Setenv("KO_DOCKER_REPO", "issif/falco-talon")
-
-	return sh.RunV("ko", "build", "--bare", "--sbom=none", "--tags", getVersion(), "--tags", getCommit(), "--tags", "latest",
+	return sh.RunV("ko", "build", "--local", "--bare", "--sbom=none", "--tags", getVersion(), "--tags", getCommit(), "--tags", "latest",
 		repoURL)
 }
 
-// push:images pushes the images to dockerhub
+// push:images builds the images and push them to the Dockerhub
 func (Push) Images() error {
-	mg.Deps(Build.Images)
-	os.Setenv("KO_DOCKER_REPO", "issif/falco-talon")
-
+	exportLDFlags()
+	os.Setenv("KO_DOCKER_REPO", "falcosecurity/falco-talon")
 	return sh.RunV("ko", "build", "--bare", "--sbom=none", "--tags", getVersion(), "--tags", getCommit(), "--tags", "latest",
 		repoURL)
 }
@@ -84,15 +84,15 @@ func (Push) Images() error {
 // release:snapshot creates a release with current commit
 func (Release) Snapshot() error {
 	exportLDFlags()
-	return sh.RunV("goreleaser", "release", "--clean", "--snapshot", "--skip-sbom", "--skip-publish")
+	return sh.RunV("goreleaser", "release", "--clean", "--snapshot", "--skip=sbom", "--skip-publish")
 }
 
-// release:tag creates a release from latest tag
+// release:tag creates a release from current tag
 func (Release) Tag() error {
 	mg.Deps(Test)
 
 	exportLDFlags()
-	return sh.RunV("goreleaser", "release", "--clean", "--skip-sign", "--skip-sbom")
+	return sh.RunV("goreleaser", "release", "--clean", "--skip=sign", "--skip=sbom")
 }
 
 // clean cleans temp folders
@@ -153,5 +153,5 @@ func getBuildDateTime() string {
 
 func generateLDFlags() string {
 	pkg := repoURL + "/configuration"
-	return fmt.Sprintf("-X %[1]s.GitVersion=%[2]s -X %[1]s.gitCommit=%[3]s -X %[1]s.gitTreeState=%[4]s -X %[1]s.buildDate=%[5]s", pkg, getVersion(), getCommit(), getGitState(), getBuildDateTime())
+	return fmt.Sprintf("-X %[1]s.GitVersion=%[2]s -X %[1]s.GitCommit=%[3]s -X %[1]s.GitTreeState=%[4]s -X %[1]s.BuildDate=%[5]s", pkg, getVersion(), getCommit(), getGitState(), getBuildDateTime())
 }

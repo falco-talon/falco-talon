@@ -8,20 +8,20 @@ import (
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 
-	"github.com/falco-talon/falco-talon/internal/handler"
-	"github.com/falco-talon/falco-talon/internal/otlp/metrics"
-	"github.com/falco-talon/falco-talon/internal/otlp/traces"
+	"github.com/falcosecurity/falco-talon/internal/handler"
+	"github.com/falcosecurity/falco-talon/internal/otlp/metrics"
+	"github.com/falcosecurity/falco-talon/internal/otlp/traces"
 
 	"github.com/fsnotify/fsnotify"
 
-	"github.com/falco-talon/falco-talon/actionners"
-	"github.com/falco-talon/falco-talon/configuration"
-	k8s "github.com/falco-talon/falco-talon/internal/kubernetes/client"
-	"github.com/falco-talon/falco-talon/internal/nats"
-	ruleengine "github.com/falco-talon/falco-talon/internal/rules"
-	"github.com/falco-talon/falco-talon/notifiers"
-	"github.com/falco-talon/falco-talon/outputs"
-	"github.com/falco-talon/falco-talon/utils"
+	"github.com/falcosecurity/falco-talon/actionners"
+	"github.com/falcosecurity/falco-talon/configuration"
+	k8s "github.com/falcosecurity/falco-talon/internal/kubernetes/client"
+	"github.com/falcosecurity/falco-talon/internal/nats"
+	ruleengine "github.com/falcosecurity/falco-talon/internal/rules"
+	"github.com/falcosecurity/falco-talon/notifiers"
+	"github.com/falcosecurity/falco-talon/outputs"
+	"github.com/falcosecurity/falco-talon/utils"
 
 	"github.com/spf13/cobra"
 )

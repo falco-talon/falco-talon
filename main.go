@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/falco-talon/falco-talon/cmd"
+	"github.com/falcosecurity/falco-talon/cmd"
 )
 
 func main() {

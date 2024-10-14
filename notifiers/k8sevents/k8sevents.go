@@ -11,9 +11,9 @@ import (
 
 	textTemplate "text/template"
 
-	kubernetes "github.com/falco-talon/falco-talon/internal/kubernetes/client"
-	"github.com/falco-talon/falco-talon/internal/models"
-	"github.com/falco-talon/falco-talon/utils"
+	kubernetes "github.com/falcosecurity/falco-talon/internal/kubernetes/client"
+	"github.com/falcosecurity/falco-talon/internal/models"
+	"github.com/falcosecurity/falco-talon/utils"
 )
 
 const (
